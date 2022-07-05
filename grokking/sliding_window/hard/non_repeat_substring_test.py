@@ -1,3 +1,6 @@
+import pytest
+
+
 def non_repeat_substring_set(string):
     window_start = 0
     char_set = set()
@@ -15,6 +18,7 @@ def non_repeat_substring_set(string):
     return max_size
 
 
+# better solution
 def non_repeat_substring(string):
     window_start = 0
     max_size = 0
@@ -28,3 +32,16 @@ def non_repeat_substring(string):
         char_index_map[char] = window_end
         max_size = max(max_size, window_end - window_start + 1)
     return max_size
+
+
+@pytest.mark.parametrize(
+    "string, expected",
+    [
+        ("aabccbb", 3),
+        ("abbbb", 2),
+        ("abccde", 3),
+    ],
+)
+def test(string, expected):
+    assert non_repeat_substring(string) == expected
+    assert non_repeat_substring_set(string) == expected
