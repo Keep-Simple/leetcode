@@ -22,6 +22,8 @@ def search_bitonic_array(arr, key):
     if right_part != -1:
         return right_part + max_el_idx + 1
 
+    return -1
+
 
 def _binary_search(arr, key):
     if not arr:
