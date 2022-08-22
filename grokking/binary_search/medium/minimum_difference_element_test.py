@@ -9,12 +9,11 @@ def search_min_diff_element(arr, key):
     """
     if key < arr[0]:
         return arr[0]
-    n = len(arr)
     # to prevent index out of bounds exception and improve perfomance
-    if key > arr[n - 1]:
-        return arr[n - 1]
+    if key > arr[-1]:
+        return arr[-1]
 
-    start, end = 0, n - 1
+    start, end = 0, len(arr) - 1
     while start <= end:
         mid = (start + end) // 2
         if arr[mid] > key:
