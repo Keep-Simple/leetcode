@@ -1,9 +1,9 @@
-from typing import DefaultDict
+import collections
 
 import pytest
 
 
-def find_word_concatenation(str, words):
+def find_word_concatenation(s, words):
     """
     Given a string and a list of words,
     find all the starting indices of substrings in the given string
@@ -11,34 +11,65 @@ def find_word_concatenation(str, words):
     without any overlapping of words.
 
     It is given that all words are of the same length.
+
+    https://leetcode.com/problems/substring-with-concatenation-of-all-words/solution/
     """
-    window_start = matches = 0
-    k = len(words[0])
-    freq_map = DefaultDict(int)
-    res_indexes = []
+    n = len(s)
+    k = len(words)
+    word_length = len(words[0])
+    substring_size = word_length * k
+    word_count = collections.Counter(words)
 
-    for w in words:
-        freq_map[w] += 1
+    def sliding_window(left):
+        words_found = collections.defaultdict(int)
+        words_used = 0
+        excess_word = False
 
-    for window_end in range(k - 1, len(str)):
-        word = str[window_end - k + 1 : window_end + 1]
-        if word in freq_map:
-            freq_map[word] -= 1
-            if freq_map[word] == 0:
-                matches += 1
+        # Do the same iteration pattern as the previous approach - iterate
+        # word_length at a time, and at each iteration we focus on one word
+        for right in range(left, n, word_length):
+            if right + word_length > n:
+                break
 
-        if window_end - window_start + 1 > k * len(words):
-            left_word = str[window_start : window_start + k]
-            if left_word in freq_map:
-                if freq_map[left_word] == 0:
-                    matches -= 1
-                freq_map[left_word] += 1
-            window_start += 1
+            sub = s[right : right + word_length]
+            if sub not in word_count:
+                # Mismatched word - reset the window
+                words_found = collections.defaultdict(int)
+                words_used = 0
+                excess_word = False
+                left = right + word_length  # Retry at the next index
+            else:
+                # If we reached max window size or have an excess word
+                while right - left == substring_size or excess_word:
+                    # Move the left bound over continously
+                    leftmost_word = s[left : left + word_length]
+                    left += word_length
+                    words_found[leftmost_word] -= 1
 
-        if matches == len(freq_map):
-            res_indexes.append(window_start)
+                    if words_found[leftmost_word] == word_count[leftmost_word]:
+                        # This word was the excess word
+                        excess_word = False
+                    else:
+                        # Otherwise we actually needed it
+                        words_used -= 1
 
-    return res_indexes
+                # Keep track of how many times this word occurs in the window
+                words_found[sub] += 1
+                if words_found[sub] <= word_count[sub]:
+                    words_used += 1
+                else:
+                    # Found too many instances already
+                    excess_word = True
+
+                if words_used == k and not excess_word:
+                    # Found a valid substring
+                    answer.append(left)
+
+    answer = []
+    for i in range(word_length):
+        sliding_window(i)
+
+    return answer
 
 
 @pytest.mark.parametrize(
@@ -48,6 +79,7 @@ def find_word_concatenation(str, words):
         ("catcatfoxfox", ["cat", "fox"], [3]),
         ("catcatcat", ["cat"], [0, 3, 6]),
         ("catcatcat", ["cat", "cat"], [0, 3]),
+        ("ababababab", ["ababa", "babab"], [0]),
     ],
 )
 def test(str, words, expected):
