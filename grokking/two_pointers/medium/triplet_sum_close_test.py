@@ -7,43 +7,39 @@ def triplet_sum_close_to_target(arr, target_sum):
     """
     Given an array of unsorted numbers and a target number,
     find a triplet in the array whose sum is as close
-    to the target number as possible,
-    return the sum of the triplet. If there are more than one such triplet,
+    to the target number as possible, return the sum of the triplet.
+    If there are more than one such triplet,
     return the sum of the triplet with the smallest sum.
     """
     arr.sort()
+
+    n = len(arr)
     smallest_diff = math.inf
 
-    for i, a in enumerate(arr):
-        if i > 0 and a == arr[i - 1]:
+    for i in range(n - 2):
+        # skip duplicates, if current is == prev
+        if i > 0 and arr[i] == arr[i - 1]:
             continue
-        res = search_pair(arr, i + 1, target_sum - a)
-        if not res:
-            continue
-        diff = target_sum - (res + a)
-        if abs(smallest_diff) > abs(diff):
-            smallest_diff = diff
-        elif abs(smallest_diff) == abs(diff):
-            smallest_diff = max(smallest_diff, diff)
+        left, right = i + 1, n - 1
+        target_sum_comp = target_sum - arr[i]
+
+        while left < right:
+            target_diff = target_sum_comp - (arr[left] + arr[right])
+
+            if abs(target_diff) < abs(smallest_diff):
+                smallest_diff = target_diff
+            elif target_diff + smallest_diff == 0:
+                smallest_diff = max(target_diff, smallest_diff)
+
+            if target_diff == 0:
+                break
+
+            if target_diff > 0:
+                left += 1
+            else:
+                right -= 1
 
     return target_sum - smallest_diff
-
-
-def search_pair(arr, left, target_sum):
-    right = len(arr) - 1
-
-    sum = None
-
-    while left < right:
-        sum = arr[left] + arr[right]
-        if sum == target_sum:
-            break
-        elif sum > target_sum:
-            right -= 1
-        else:
-            left += 1
-
-    return sum
 
 
 @pytest.mark.parametrize(
@@ -52,6 +48,7 @@ def search_pair(arr, left, target_sum):
         ([-2, 0, 1, 2], 2, 1),
         ([-3, -1, 1, 2], 1, 0),
         ([1, 0, 1, 1], 100, 3),
+        ([0, 0, 0], 1, 0),
     ],
 )
 def test(arr, target_sum, expected):

@@ -10,6 +10,7 @@ def search_triplets(arr):
     triplets = []
 
     for i, a in enumerate(arr):
+        # skipping duplicates
         if i > 0 and a == arr[i - 1]:
             continue
         search_pair(arr, i + 1, -a, triplets)
