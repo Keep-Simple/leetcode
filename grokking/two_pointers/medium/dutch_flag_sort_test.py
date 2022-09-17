@@ -22,13 +22,16 @@ def dutch_flag_sort(arr):
     while i <= high:
         match arr[i]:
             case 0:
+                # arr[low] can't be 2, because it was swapped on prev iterations
+                # if arr[low] == 0, nothing changed
+                # if arr[low] == 1, we don't need to swap
                 swap(low, i)
                 i += 1
                 low += 1
             case 1:
                 i += 1
             case 2:
-                # after the swap the number at index 'i' could be 0, 1 or 2
+                # after the swap arr[i] could be 0, 1 or 2
                 swap(high, i)
                 high -= 1
 
