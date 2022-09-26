@@ -15,7 +15,7 @@ def find_distance_unbalanced_bst(values, n, node1, node2):
     if node1 not in values or node2 not in values:
         return -1
 
-    # construct binary tree
+    # construct binary search tree
     bst_root = None
     for value in values:
         new_node = TreeNode(value)
@@ -32,7 +32,7 @@ def find_distance_unbalanced_bst(values, n, node1, node2):
                 else:
                     curr_node.right = new_node
                     break
-            elif curr_node.value < new_node.value:
+            elif curr_node.value > new_node.value:
                 if curr_node.left:
                     curr_node = curr_node.left
                 else:

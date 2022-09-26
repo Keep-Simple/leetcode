@@ -25,11 +25,15 @@ def group_anagrams(strs):
     [
         (
             ["eat", "tea", "tan", "ate", "nat", "bat"],
-            [["bat"], ["nat", "tan"], ["ate", "eat", "tea"]],
+            [
+                ["eat", "tea", "ate"],
+                ["tan", "nat"],
+                ["bat"],
+            ],
         ),
         ([""], [[""]]),
         (["a"], [["a"]]),
     ],
 )
 def test_group_anagrams(strs, expected):
-    assert group_anagrams(strs) == expected
+    assert list(group_anagrams(strs)) == expected

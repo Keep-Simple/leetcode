@@ -23,7 +23,7 @@ def product_except_self(nums):
     n = len(nums)
     ans = [1] * n
 
-    prefix = 1
+    prefix = nums[0]
     for i in range(1, n):
         ans[i] = prefix
         prefix *= nums[i]

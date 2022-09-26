@@ -6,7 +6,7 @@ separator = "|"
 def encode_strings(strings):
     global separator
     strings_copy = strings.copy()
-    for i, str in enumerate(separator):
+    for i, str in enumerate(strings_copy):
         strings_copy[i] = f"{len(str)}{separator}{str}"
     return "".join(strings_copy)
 
