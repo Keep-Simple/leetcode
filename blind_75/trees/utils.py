@@ -40,28 +40,32 @@ def array_to_bt(arr):
     """
     BFS traversal (array representation) to binary tree (not binary search tree)
     """
-    if not arr:
+    if not arr or arr[0] is None:
         return None
 
     root = TreeNode(arr[0])
+    n = len(arr)
 
     queue = deque([root])
-    cursor = 1
 
-    while cursor < len(arr) - 1:
-        node = queue.popleft()
-        node.left = TreeNode(arr[cursor])
-        queue.append(node.left)
-        node.right = TreeNode(arr[cursor + 1])
-        queue.append(node.right)
-        cursor += 2
+    idx = 0
+    while idx < n:
+        parent = queue.popleft()
+        idx += 1
+        if idx < n and arr[idx] is not None:
+            parent.left = TreeNode(arr[idx])
+            queue.append(parent.left)
+        idx += 1
+        if idx < n and arr[idx] is not None:
+            parent.right = TreeNode(arr[idx])
+            queue.append(parent.right)
 
     return root
 
 
-def bst_to_array(root):
+def bt_to_array(root):
     """
-    Do bfs traversal
+    Do bfs traversal, (level by level)
     """
     if not root:
         return []
@@ -70,11 +74,20 @@ def bst_to_array(root):
     arr = []
 
     while queue:
-        node = queue.popleft()
-        arr.append(node.val)
-        if node.left:
-            queue.append(node.left)
-        if node.right:
-            queue.append(node.right)
+        lvl_size = len(queue)
+        new_queue = []
+        has_values = False
+
+        for i in range(lvl_size):
+            node = queue[i]
+            if node is not None:
+                has_values = True
+                new_queue.append(node.left)
+                new_queue.append(node.right)
+
+        if has_values:
+            arr.extend(map(lambda el: el.val if el else None, queue))
+
+        queue = new_queue
 
     return arr

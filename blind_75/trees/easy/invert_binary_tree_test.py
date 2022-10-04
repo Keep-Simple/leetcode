@@ -1,6 +1,6 @@
 import pytest
 
-from blind_75.trees.utils import array_to_bst, bst_to_array
+from blind_75.trees.utils import array_to_bst, bt_to_array
 
 
 def invert_tree(root):
@@ -48,4 +48,4 @@ def invert_tree_recursive(root):
     ],
 )
 def test_invert_tree(root, expected):
-    assert bst_to_array(invert_tree(array_to_bst(root))) == expected
+    assert bt_to_array(invert_tree(array_to_bst(root))) == expected

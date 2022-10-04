@@ -18,7 +18,7 @@ def is_same_tree(p, q):
         if (p_node is None) ^ (q_node is None):
             return False
         # p_node and q_node both hold values
-        elif p_node is not None:
+        if p_node is not None:
             if p_node.val != q_node.val:
                 return False
             stack.append((p_node.left, q_node.left))
