@@ -30,9 +30,7 @@ class Trie:
     def insert(self, word: str) -> None:
         curr = self.root
         for char in word:
-            if curr.children.get(char) is None:
-                curr.children[char] = TrieNode()
-            curr = curr.children[char]
+            curr = curr.children.setdefault(char, TrieNode())
         curr.is_end = True
 
     def _search(self, s: str) -> Optional[TrieNode]:

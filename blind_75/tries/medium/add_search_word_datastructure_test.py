@@ -9,6 +9,10 @@ WordDictionary() Initializes the object.
 void addWord(word) Adds word to the data structure, it can be matched later.
 bool search(word) Returns true if there is any string in the data structure that matches word or false otherwise.
     word may contain dots '.' where dots can be matched with any letter.
+
+Solution:
+    implement method for inserting word to the trie
+    implement enhanced search method for the trie, use recursion to handle wildcard '.'
 """
 
 
@@ -25,9 +29,7 @@ class WordDictionary:
     def addWord(self, word: str) -> None:
         curr = self.trie
         for char in word:
-            if not curr.children.get(char):
-                curr.children[char] = TrieNode()
-            curr = curr.children[char]
+            curr = curr.children.setdefault(char, TrieNode())
         curr.is_end = True
 
     def search(self, word: str) -> bool:
