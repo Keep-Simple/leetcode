@@ -3,12 +3,25 @@ import pytest
 
 def exist(board, word):
     """
+    https://leetcode.com/problems/word-search/
+
     Given an m x n grid of characters board and a string word,
     return true if word exists in the grid.
 
     The word can be constructed from letters of sequentially adjacent cells,
     where adjacent cells are horizontally or vertically neighboring.
     The same letter cell may not be used more than once.
+
+    Solution:
+        Use backtracking (stateful dfs), for bruteforcing over each cell
+        Keep track of currently visited elements, by modifying board
+        after recursivly visited all neighboars - backtrack by modifying board back
+
+    TC:
+        m*n - visiting each cell
+        4^len(word) - max dfs stack, 4 because we have 4 moves to do
+
+        O(m*n * 4^len(word))
     """
     # top, right, bottom, left
     moves = ((1, 0), (0, 1), (-1, 0), (0, -1))
