@@ -6,6 +6,8 @@ class Node:
 
 def clone_graph(node):
     """
+    https://leetcode.com/problems/clone-graph/
+
     Given a reference of a node in a connected undirected graph.
     Return a deep copy (clone) of the graph.
 
@@ -22,18 +24,18 @@ def clone_graph(node):
     if not node:
         return None
 
-    old_to_new = {}
+    new_nodes_map = {}
 
     def dfs(node):
-        if node in old_to_new:
-            return old_to_new[node]
+        if node in new_nodes_map:
+            return new_nodes_map[node]
 
-        copy = Node(node.val)
-        old_to_new[node] = copy
+        new_node = Node(node.val)
+        new_nodes_map[node] = new_node
 
         for neighbor in node.neighbors:
-            copy.neighbors.append(dfs(neighbor))
+            new_node.neighbors.append(dfs(neighbor))
 
-        return copy
+        return new_node
 
     return dfs(node)
